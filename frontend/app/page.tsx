@@ -1,10 +1,13 @@
+
+
+
 'use client'
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
 import {
   ArrowRight, Zap, Twitter, Linkedin, Instagram, BookOpen,
   Mail, Youtube, Check, Star, Play, Menu, X, Sparkles,
-  Upload, FileText, ChevronRight
+  Upload, FileText, ChevronRight,Sun, Moon
 } from 'lucide-react'
 
 const FORMATS = [
@@ -95,12 +98,26 @@ const TESTIMONIALS = [
 export default function LandingPage() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const [theme, setTheme] = useState('dark')
 
   useEffect(() => {
     const fn = () => setScrolled(window.scrollY > 40)
     window.addEventListener('scroll', fn)
     return () => window.removeEventListener('scroll', fn)
   }, [])
+
+    useEffect(() => {
+    const saved = localStorage.getItem('rp_theme') || 'dark'
+    setTheme(saved)
+    document.documentElement.setAttribute('data-theme', saved)
+  }, [])
+
+  const toggleTheme = () => {
+    const next = theme === 'dark' ? 'light' : 'dark'
+    setTheme(next)
+    localStorage.setItem('rp_theme', next)
+    document.documentElement.setAttribute('data-theme', next)
+  }
 
   return (
     <div style={{ background: 'var(--bg)', color: 'var(--text-primary)', minHeight: '100vh', overflowX: 'hidden' }}>
@@ -133,7 +150,34 @@ export default function LandingPage() {
             ))}
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }} className="hidden md:flex">
+               <div style={{ display: 'flex', alignItems: 'center', gap: 12 }} className="hidden md:flex">
+            {/* Theme toggle */}
+            <button
+              onClick={toggleTheme}
+              title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+              style={{
+                background: 'var(--surface)',
+                border: '1px solid var(--border)',
+                borderRadius: 8,
+                cursor: 'pointer',
+                padding: '7px 10px',
+                color: 'var(--text-secondary)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                transition: 'all 0.15s',
+              }}
+              onMouseEnter={e => {
+                (e.currentTarget as any).style.color = 'var(--accent)'
+                ;(e.currentTarget as any).style.borderColor = 'var(--accent)'
+              }}
+              onMouseLeave={e => {
+                (e.currentTarget as any).style.color = 'var(--text-secondary)'
+                ;(e.currentTarget as any).style.borderColor = 'var(--border)'
+              }}
+            >
+              {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
+            </button>
             <Link href="/login" style={{ color: 'var(--text-secondary)', textDecoration: 'none', fontSize: 14, padding: '8px 16px', borderRadius: 8, transition: 'color 0.15s' }}>
               Log in
             </Link>

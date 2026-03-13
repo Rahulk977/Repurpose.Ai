@@ -7,11 +7,11 @@ import { authAPI, clearToken, getToken } from '@/lib/api'
 import { useTheme } from '@/components/ThemeProvider'
 
 const NAV = [
-  { href: '/dashboard',  label: 'Dashboard',   icon: LayoutDashboard },
-  { href: '/generate',   label: 'New Content',  icon: PlusSquare },
-  { href: '/history',    label: 'History',      icon: Clock },
-  { href: '/billing',    label: 'Billing',      icon: CreditCard },
-  { href: '/settings',   label: 'Settings',     icon: Settings },
+  { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { href: '/generate', label: 'New Content', icon: PlusSquare },
+  { href: '/history', label: 'History', icon: Clock },
+  { href: '/billing', label: 'Billing', icon: CreditCard },
+  { href: '/settings', label: 'Settings', icon: Settings },
 ]
 
 const PLAN_STYLES: Record<string, string> = {
@@ -33,7 +33,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     if (!token) { router.replace('/login'); return }
     authAPI.getMe()
       .then(r => setUser(r.data.user))
-      .catch(() => router.replace('/login'))
+      .catch(() => {
+        clearToken()                  // ← ADD THIS
+        router.replace('/login')
+      })
       .finally(() => setLoading(false))
   }, [])
 

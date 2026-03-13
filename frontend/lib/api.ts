@@ -1,7 +1,6 @@
 import axios from 'axios'
-import Cookies from 'js-cookie'
 
-const BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'
+const BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5002/api'
 
 export const api = axios.create({
   baseURL: BASE,
@@ -11,7 +10,9 @@ export const api = axios.create({
 
 // ── Attach token ──────────────────────────────────────────────────────────────
 api.interceptors.request.use((config) => {
-  const token = Cookies.get('rp_token') ?? (typeof localStorage !== 'undefined' ? localStorage.getItem('rp_token') : null)
+  const token = typeof localStorage !== 'undefined'
+    ? localStorage.getItem('rp_token')
+    : null
   if (token) config.headers.Authorization = `Bearer ${token}`
   return config
 })
@@ -21,8 +22,9 @@ api.interceptors.response.use(
   (res) => res,
   (err) => {
     if (err.response?.status === 401) {
-      Cookies.remove('rp_token')
-      if (typeof localStorage !== 'undefined') localStorage.removeItem('rp_token')
+      if (typeof localStorage !== 'undefined') {
+        localStorage.removeItem('rp_token')
+      }
       if (typeof window !== 'undefined' && !window.location.pathname.startsWith('/login')) {
         window.location.href = '/login?expired=true'
       }
@@ -41,31 +43,31 @@ export const authAPI = {
 }
 
 export const contentAPI = {
-  generate:    (fd: FormData)                                    => api.post('/content/generate', fd, { headers: { 'Content-Type': 'multipart/form-data' } }),
-  getHistory:  (params?: Record<string, any>)                    => api.get('/content/history', { params }),
-  getStats:    ()                                                 => api.get('/content/stats'),
-  getContent:  (id: string)                                      => api.get(`/content/${id}`),
+  generate:    (fd: FormData)                                             => api.post('/content/generate', fd, { headers: { 'Content-Type': 'multipart/form-data' } }),
+  getHistory:  (params?: Record<string, any>)                            => api.get('/content/history', { params }),
+  getStats:    ()                                                         => api.get('/content/stats'),
+  getContent:  (id: string)                                              => api.get(`/content/${id}`),
   update:      (id: string, d: { contentType: string; newContent: string }) => api.put(`/content/${id}`, d),
-  regenerate:  (id: string, contentType: string)                 => api.post(`/content/${id}/regenerate`, { contentType }),
-  delete:      (id: string)                                      => api.delete(`/content/${id}`),
+  regenerate:  (id: string, contentType: string)                         => api.post(`/content/${id}/regenerate`, { contentType }),
+  delete:      (id: string)                                              => api.delete(`/content/${id}`),
 }
 
 export const subscriptionAPI = {
-  getStatus:      ()              => api.get('/subscription/status'),
-  createCheckout: (plan: string)  => api.post('/subscription/create', { plan }),
-  createPortal:   ()              => api.post('/subscription/portal'),
+  getStatus:      ()             => api.get('/subscription/status'),
+  createCheckout: (plan: string) => api.post('/subscription/create', { plan }),
+  createPortal:   ()             => api.post('/subscription/portal'),
 }
 
 // ── Token helpers ─────────────────────────────────────────────────────────────
 export const saveToken = (token: string) => {
-  Cookies.set('rp_token', token, { expires: 7, sameSite: 'strict' })
   localStorage.setItem('rp_token', token)
 }
 
 export const clearToken = () => {
-  Cookies.remove('rp_token')
   localStorage.removeItem('rp_token')
 }
 
-export const getToken = (): string | null =>
-  Cookies.get('rp_token') ?? localStorage.getItem('rp_token')
+export const getToken = (): string | null => {
+  if (typeof localStorage === 'undefined') return null
+  return localStorage.getItem('rp_token')
+}

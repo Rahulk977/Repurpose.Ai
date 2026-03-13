@@ -147,9 +147,9 @@ export default function ContentDetailPage() {
   return (
     <DashboardLayout>
       <div style={{ maxWidth: 640, margin: '0 auto' }}>
-        <button onClick={() => router.back()} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 13, color: 'var(--text-secondary)', background: 'none', border: 'none', cursor: 'pointer', marginBottom: 20, padding: 0 }}>
+        {/* <button onClick={() => router.back()} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 13, color: 'var(--text-secondary)', background: 'none', border: 'none', cursor: 'pointer', marginBottom: 20, padding: 0 }}>
           <ChevronLeft size={15} /> Back to History
-        </button>
+        </button> */}
 
         <div style={{ marginBottom: 28 }}>
           <h1 style={{ fontFamily: 'var(--font-display)', fontSize: '1.6rem', fontWeight: 600, marginBottom: 6 }}>{content?.title}</h1>
