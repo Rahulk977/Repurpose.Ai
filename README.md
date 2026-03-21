@@ -27,53 +27,12 @@ Backend:   Node.js · Express.js · Helmet · Morgan · Rate limiting
 Database:  MongoDB · Mongoose (with indexes)
 AI:        OpenAI GPT-3.5/GPT-4-Turbo · Whisper (audio transcription)
 Auth:      JWT (jsonwebtoken) · bcryptjs
-Payments:  Stripe Checkout + Billing Portal + Webhooks
-Deploy:    Vercel (frontend) · Railway/Render (backend) · MongoDB Atlas (DB)
+
 ```
 
 ---
 
-## 📁 Folder Structure
 
-```
-repurpose-ai/
-├── frontend/
-│   ├── app/
-│   │   ├── page.tsx              # Landing page
-│   │   ├── login/page.tsx
-│   │   ├── signup/page.tsx
-│   │   ├── dashboard/
-│   │   │   ├── layout.tsx        # Sidebar layout (protects all routes)
-│   │   │   └── page.tsx          # Dashboard home
-│   │   ├── generate/page.tsx     # Content generation wizard
-│   │   ├── history/
-│   │   │   ├── page.tsx          # History list
-│   │   │   └── [id]/page.tsx     # Content detail + editable cards
-│   │   ├── billing/page.tsx      # Stripe subscription management
-│   │   └── settings/page.tsx     # User settings
-│   ├── lib/api.ts                # Axios client + API modules
-│   └── hooks/useAuth.tsx         # Auth context (optional)
-│
-└── backend/
-    ├── server.js                 # Express app entry point
-    ├── models/
-    │   ├── User.js               # User + subscription + usage
-    │   └── Content.js            # Generated content
-    ├── controllers/
-    │   ├── authController.js
-    │   ├── contentController.js  # Generation + CRUD
-    │   └── subscriptionController.js
-    ├── routes/
-    │   ├── auth.js
-    │   ├── content.js
-    │   └── subscription.js
-    ├── middleware/
-    │   └── auth.js               # JWT verification
-    └── services/
-        └── aiService.js          # OpenAI + Whisper integration
-```
-
----
 
 ## 🚀 Local Development Setup
 
@@ -81,7 +40,7 @@ repurpose-ai/
 - Node.js 18+
 - MongoDB (local or Atlas)
 - OpenAI API key
-- Stripe account (test mode)
+- Stripe account (test mode not done yet)
 
 ### 1. Clone & Install
 
@@ -126,7 +85,7 @@ NEXT_PUBLIC_API_URL=http://localhost:5000/api
 NEXT_PUBLIC_APP_URL=http://localhost:3000
 ```
 
-### 3. Set Up Stripe Products
+### 3. Set Up Stripe Products( to be done later)
 
 In [Stripe Dashboard](https://dashboard.stripe.com) → Products:
 
@@ -156,37 +115,6 @@ npm run dev
 
 ---
 
-## 🌐 API Reference
-
-### Auth
-| Method | Endpoint | Auth | Description |
-|---|---|---|---|
-| POST | `/api/auth/signup` | ❌ | Create account |
-| POST | `/api/auth/login` | ❌ | Login, returns JWT |
-| GET | `/api/auth/me` | ✅ | Get current user |
-| PUT | `/api/auth/settings` | ✅ | Update profile/settings |
-| PUT | `/api/auth/password` | ✅ | Change password |
-
-### Content
-| Method | Endpoint | Auth | Description |
-|---|---|---|---|
-| POST | `/api/content/generate` | ✅ | Generate content (multipart) |
-| GET | `/api/content/history` | ✅ | Paginated history |
-| GET | `/api/content/stats` | ✅ | Usage statistics |
-| GET | `/api/content/:id` | ✅ | Get single item |
-| PUT | `/api/content/:id` | ✅ | Edit a format |
-| POST | `/api/content/:id/regenerate` | ✅ | Regenerate a format |
-| DELETE | `/api/content/:id` | ✅ | Delete item |
-
-### Subscription
-| Method | Endpoint | Auth | Description |
-|---|---|---|---|
-| GET | `/api/subscription/status` | ✅ | Plan + usage status |
-| POST | `/api/subscription/create` | ✅ | Start Stripe checkout |
-| POST | `/api/subscription/portal` | ✅ | Open billing portal |
-| POST | `/api/subscription/webhook` | ❌ | Stripe webhook handler |
-
----
 
 ## 💳 Subscription Plans
 
@@ -201,49 +129,7 @@ npm run dev
 
 ---
 
-## 🚢 Deployment
 
-### Frontend → Vercel
-```bash
-cd frontend
-npx vercel deploy --prod
-# Add env vars in Vercel dashboard under Settings → Environment Variables
-```
-
-### Backend → Railway
-1. Push to GitHub
-2. New Railway project → Deploy from GitHub repo
-3. Set the root directory to `/backend`
-4. Add all environment variables
-5. Set start command: `npm start`
-
-### Backend → Render
-1. New Web Service → Connect GitHub repo
-2. Root directory: `backend`
-3. Build command: `npm install`
-4. Start command: `npm start`
-5. Add environment variables
-
-### Database → MongoDB Atlas
-1. Create free cluster at [cloud.mongodb.com](https://cloud.mongodb.com)
-2. Create database user
-3. Whitelist `0.0.0.0/0` (or specific IP)
-4. Get connection string: `mongodb+srv://user:pass@cluster.mongodb.net/repurpose-ai`
-5. Update `MONGODB_URI` in production
-
----
-
-## 🔒 Security Features
-
-- **Helmet.js**: HTTP security headers
-- **Rate limiting**: 100 req/15min globally, 20 req/hr on auth routes
-- **bcrypt**: Password hashing (12 salt rounds)
-- **JWT**: Signed tokens with expiry
-- **Stripe webhook verification**: Cryptographic signature checking
-- **Express-validator**: Input validation and sanitization
-- **CORS**: Strict origin allowlist
-
----
 
 ## 📝 License
 
