@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { Zap, Eye, EyeOff, ArrowRight } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { authAPI, saveToken } from '@/lib/api'
-
+export const dynamic = 'force-dynamic'
 export default function LoginPage() {
   const router = useRouter()
   const params = useSearchParams()

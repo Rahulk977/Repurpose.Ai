@@ -7,7 +7,7 @@ import { Youtube, Upload, FileText, Twitter, Linkedin, Instagram, BookOpen, Mail
 import toast from 'react-hot-toast'
 import { contentAPI } from '@/lib/api'
 import DashboardLayout from '../dashboard/layout'
-
+export const dynamic = 'force-dynamic'
 const FORMATS = [
   { id: 'twitter',        label: 'Twitter Thread',   icon: Twitter,   color: '#1DA1F2' },
   { id: 'linkedin',       label: 'LinkedIn Post',     icon: Linkedin,  color: '#0A66C2' },

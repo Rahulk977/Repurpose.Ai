@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { Zap, Eye, EyeOff, ArrowRight, Check } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { authAPI, saveToken } from '@/lib/api'
-
+export const dynamic = 'force-dynamic'
 const pwStrength = (pw: string) => {
   if (!pw) return 0
   let s = 0

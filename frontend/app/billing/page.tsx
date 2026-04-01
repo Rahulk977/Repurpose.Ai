@@ -6,7 +6,7 @@ import { subscriptionAPI } from '@/lib/api'
 import toast from 'react-hot-toast'
 import DashboardLayout from '../dashboard/layout'
 import { format } from 'date-fns'
-
+export const dynamic = 'force-dynamic'
 const PLANS = [
   {
     id: 'free', name: 'Free', price: '$0', period: '/forever',
